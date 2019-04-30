@@ -1,5 +1,6 @@
 package com.ming.seckill.config;
 
+import com.ming.seckill.access.UserContext;
 import com.ming.seckill.domain.SeckillUser;
 import com.ming.seckill.redis.RedisService;
 import com.ming.seckill.service.SeckillUserService;
@@ -30,15 +31,16 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
-        HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
-        HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
-        String paramToken = request.getParameter(SeckillUserService.COOKIE_NAME_TOKEN);
-        String cookieToken = getCookieValue(request,SeckillUserService.COOKIE_NAME_TOKEN);
-        if (StringUtils.isEmpty(cookieToken)&& StringUtils.isEmpty(paramToken)){
-            return null;
-        }
-        String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
-        SeckillUser seckillUser = seckillUserService.getByToken(response,token);
+//        HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+//        HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
+//        String paramToken = request.getParameter(SeckillUserService.COOKIE_NAME_TOKEN);
+//        String cookieToken = getCookieValue(request,SeckillUserService.COOKIE_NAME_TOKEN);
+//        if (StringUtils.isEmpty(cookieToken)&& StringUtils.isEmpty(paramToken)){
+//            return null;
+//        }
+//        String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
+//        SeckillUser seckillUser = seckillUserService.getByToken(response,token);
+        SeckillUser seckillUser = UserContext.getSeckillUser();
         return seckillUser;
     }
 

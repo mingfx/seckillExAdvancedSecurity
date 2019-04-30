@@ -1,15 +1,13 @@
 package com.ming.seckill.controller;
 
+import com.ming.seckill.access.AccessLimit;
 import com.ming.seckill.domain.OrderInfo;
 import com.ming.seckill.domain.SeckillGoods;
 import com.ming.seckill.domain.SeckillOrder;
 import com.ming.seckill.domain.SeckillUser;
 import com.ming.seckill.rabbitMQ.MQSender;
 import com.ming.seckill.rabbitMQ.SeckillMessage;
-import com.ming.seckill.redis.GoodsKey;
-import com.ming.seckill.redis.OrderKey;
-import com.ming.seckill.redis.RedisService;
-import com.ming.seckill.redis.SeckillKey;
+import com.ming.seckill.redis.*;
 import com.ming.seckill.result.CodeMsg;
 import com.ming.seckill.result.Result;
 import com.ming.seckill.service.OrderService;
@@ -25,7 +23,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -144,14 +144,29 @@ public class SeckillController implements InitializingBean {
         return result;
     }
 
+    @AccessLimit(seconds = 5,maxCount = 5,needLogin = true)
     @GetMapping("/path")
     @ResponseBody
-    public Result<String> getSeckillPath(SeckillUser seckillUser,
+    public Result<String> getSeckillPath(HttpServletRequest request,
+                                         SeckillUser seckillUser,
                                          @RequestParam("goodsId") long goodsId,
-                                         @RequestParam("verifyCode") int verifyCode) {
+                                         @RequestParam(value = "verifyCode",defaultValue = "0") int verifyCode) {
         if (seckillUser == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
+        //限流防刷，查询访问次数。5秒钟访问5次  放在拦截器里了
+//        String uri = request.getRequestURI();
+//        //限定同一用户访问一个接口的次数
+//        String key = uri + "_" +seckillUser.getId();
+//        Integer count = redisService.get(AccessKey.access,key,Integer.class);
+//        if (count==null){
+//            redisService.set(AccessKey.access,key,1);
+//        }else if (count < 5){
+//            redisService.incr(AccessKey.access,key);
+//        }else{
+//            return Result.error(CodeMsg.ACCESS_LIMIT_REACHED);
+//        }
+
         //验证码校验
         boolean check = seckillService.checkVerifyCode(verifyCode,seckillUser.getId(),goodsId);
         if (!check){

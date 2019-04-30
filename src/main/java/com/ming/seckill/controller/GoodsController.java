@@ -132,7 +132,7 @@ public class GoodsController {
     @RequestMapping(value="/detail/{goodsId}")
     @ResponseBody
     public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response,
-                                        Model model, SeckillUser user,
+                                        SeckillUser user,
                                         @PathVariable("goodsId")long goodsId) {
         SeckillGoodsVo goods = seckillGoodsService.getSeckillGoodsVoById(goodsId);
         long startAt = goods.getStartDate().getTime();

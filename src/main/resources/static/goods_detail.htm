@@ -28,7 +28,7 @@
   </div>
   <table class="table" id="goodslist">
   	<tr>  
-        <td>商品名称</td>  
+        <td>商品名称</td>
         <td colspan="3" id="goodsName"></td>
      </tr>  
      <tr>  
@@ -158,16 +158,25 @@
         if (user) {
             $("#userTip").hide();
 
-            $("#goodsName").text(goods.goodsName);
-            $("#goodsImg").attr("src", goods.goodsImg);
-            $("#startTime").text(new Date(goods.startDate).format("yyyy-MM-dd hh:mm:ss"));
-            $("#remainSeconds").val(remainSeconds);
-            $("#goodsId").val(goods.id);
-            $("#goodsPrice").text(goods.goodsPrice);
-            $("#seckillPrice").text(goods.seckillPrice);
-            $("#stockCount").text(goods.stockCount);
-            countDown();
+            // $("#goodsName").text(goods.goodsName);
+            // $("#goodsImg").attr("src", goods.goodsImg);
+            // $("#startTime").text(new Date(goods.startDate).format("yyyy-MM-dd hh:mm:ss"));
+            // $("#remainSeconds").val(remainSeconds);
+            // $("#goodsId").val(goods.id);
+            // $("#goodsPrice").text(goods.goodsPrice);
+            // $("#seckillPrice").text(goods.seckillPrice);
+            // $("#stockCount").text(goods.stockCount);
+            // countDown();
         }
+        $("#goodsName").text(goods.goodsName);
+        $("#goodsImg").attr("src", goods.goodsImg);
+        $("#startTime").text(new Date(goods.startDate).format("yyyy-MM-dd hh:mm:ss"));
+        $("#remainSeconds").val(remainSeconds);
+        $("#goodsId").val(goods.id);
+        $("#goodsPrice").text(goods.goodsPrice);
+        $("#seckillPrice").text(goods.seckillPrice);
+        $("#stockCount").text(goods.stockCount);
+        countDown();
     }
 
 $(function() {
